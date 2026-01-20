@@ -37,9 +37,12 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/m5-brief2-github-actions-docker-hub:latest
             ${{ secrets.DOCKER_USERNAME }}/m5-brief2-github-actions-docker-hub:${{ github.sha }}
+          build-args: |
+            APP_VERSION=${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Move new cache
         run: |
           rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
